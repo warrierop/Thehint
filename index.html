@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystery Pop-Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f0f8ff, #e0e0e0);
+            font-family: 'Roboto', sans-serif;
+            position: relative;
+        }
+
+        #mystery {
+            padding: 20px;
+            border: 2px solid #ff69b4;
+            border-radius: 10px;
+            background: white;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: none; /* Hidden initially */
+        }
+
+        #popup {
+            position: absolute;
+            padding: 20px;
+            background: white;
+            border: 2px solid #ff69b4;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            animation: float 4s infinite alternate;
+            display: none; /* Hidden initially */
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+
+        .heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            animation: pop 1s forwards;
+            opacity: 0;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        #submit {
+            padding: 10px 20px;
+            border: none;
+            background: #ff69b4;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #submit:hover {
+            background: #ff1493;
+        }
+    </style>
+</head>
+<body>
+
+<div id="mystery">
+    <h2>Guess the Secret!</h2>
+    <p>What has keys but can't open locks?</p>
+    <input type="text" id="answer" placeholder="Your Answer">
+    <button id="submit">Submit</button>
+    <p id="hint" style="color: red; display: none;">Try Again!</p>
+</div>
+
+<div id="popup">I like you! <br><button id="yesBtn">Yes</button></div>
+
+<script>
+    const mysteryDiv = document.getElementById('mystery');
+    const popup = document.getElementById('popup');
+    const yesBtn = document.getElementById('yesBtn');
+    const submitBtn = document.getElementById('submit');
+    const answerInput = document.getElementById('answer');
+    const hint = document.getElementById('hint');
+
+    // Show the mystery question
+    window.onload = () => {
+        mysteryDiv.style.display = 'block';
+    };
+
+    // Check the answer
+    submitBtn.addEventListener('click', () => {
+        const answer = answerInput.value.toLowerCase();
+        if (answer === 'piano') {
+            mysteryDiv.style.display = 'none';
+            showPopup();
+        } else {
+            hint.style.display = 'block';
+        }
+    });
+
+    // Function to show the pop-up
+    function showPopup() {
+        popup.style.display = 'block';
+        floatPopup();
+    }
+
+    // Function to make the popup float around
+    function floatPopup() {
+        const x = Math.random() * (window.innerWidth - 200);
+        const y = Math.random() * (window.innerHeight - 100);
+        popup.style.left = x + 'px';
+        popup.style.top = y + 'px';
+        popup.style.animation = 'float 4s infinite alternate';
+    }
+
+    // Float the popup every 2 seconds
+    setInterval(floatPopup, 2000);
+
+    // When 'Yes' is clicked
+    yesBtn.addEventListener('click', () => {
+        for (let i = 0; i < 10; i++) {
+            createHeart();
+        }
+    });
+
+    // Create heart images
+    function createHeart() {
+        const heart = document.createElement('img');
+        heart.src = 'https://cdn.pixabay.com/photo/2013/07/12/17/07/heart-73148_1280.png'; // Link to heart image
+        heart.classList.add('heart');
+        document.body.appendChild(heart);
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.bottom = '0px';
+        heart.style.opacity = 1;
+        setTimeout(() => {
+            heart.style.opacity = 0;
+            heart.style.transform = `translateY(-100px)`;
+        }, 10);
+        setTimeout(() => {
+            heart.remove();
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
